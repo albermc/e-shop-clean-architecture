@@ -1,0 +1,19 @@
+﻿using MediatR.NotificationPublishers;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Application;
+
+public static class DependencyInjection
+{
+	public static IServiceCollection AddApplication(this IServiceCollection services)
+	{
+		services.AddMediatR(config =>
+		{
+			config.RegisterServicesFromAssembly(AssemblyReference.Assembly);
+			// TaskWhenAllPublisher
+			config.NotificationPublisher = new ForeachAwaitPublisher();
+		});
+
+		return services;
+	}
+}
