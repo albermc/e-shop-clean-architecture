@@ -9,12 +9,10 @@ namespace Application.Orders.Commands.CreateOrder
 	internal sealed class CreateOrderCommandHandler : ICommandHandler<CreateOrderCommand, Guid>
 	{
 		private readonly IApplicationDbContext _context;
-		private readonly IPublisher _publisher;
 
-		public CreateOrderCommandHandler(IApplicationDbContext context, IPublisher publisher)
+		public CreateOrderCommandHandler(IApplicationDbContext context)
 		{
 			_context = context;
-			_publisher = publisher;
 		}
 
 		public async Task<Result<Guid>> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
@@ -33,8 +31,6 @@ namespace Application.Orders.Commands.CreateOrder
 			_context.Orders.Add(order);
 
 			await _context.SaveChangesAsync(cancellationToken);
-
-			await _publisher.Publish(new OrderCreatedEvent(order.Id), cancellationToken);
 
 			return Result.Success(order.Id);
 		}

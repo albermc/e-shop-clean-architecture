@@ -1,4 +1,5 @@
 ﻿using Domain.Customers;
+using Domain.Primitives;
 using Domain.Products;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Orders;
 
-public class Order
+public class Order : Entity
 {
 	private readonly HashSet<LineItem> _lineItems = new HashSet<LineItem>();
 
@@ -34,6 +35,27 @@ public class Order
 			CustomerId = customer.Id
 		};
 
+		order.Raise(new OrderCreatedDomainEvent(Guid.NewGuid(), order.Id));
+
 		return order;
+	}
+
+	public void AddLineItem(Guid productId, Money price)
+	{
+		var lineItem = new LineItem(Guid.NewGuid(), Id, productId, price);
+		_lineItems.Add(lineItem);
+	}
+
+	public void RemoveLineItem(Guid lineItemId)
+	{
+		var lineItem = _lineItems.FirstOrDefault(li => li.Id == lineItemId);
+		if (lineItem != null)
+		{
+			return;
+		}
+
+		_lineItems.Remove(lineItem!);
+
+		Raise(new LineItemRemovedDomainEvent(Guid.NewGuid(), Id, lineItemId));
 	}
 }

@@ -1,3 +1,4 @@
+using Application.Behaviours;
 using eShop.App.Middlewares;
 using MediatR;
 
@@ -15,6 +16,7 @@ builder.Services.Scan(
 
 builder.Services.AddMediatR(config =>
 	config.RegisterServicesFromAssembly(Application.AssemblyReference.Assembly));
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehaviour<,>));
 
 builder.Services.AddControllers()
 	.AddApplicationPart(Presentation.AssemblyReference.Assembly);
