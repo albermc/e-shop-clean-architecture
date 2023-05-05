@@ -34,8 +34,8 @@ namespace Persistence
 		{
 			var domainEvents = ChangeTracker.Entries<Entity>()
 				.Select(e => e.Entity)
-				.Where(e => e.DomainEvents.Any())
-				.SelectMany(e => e.DomainEvents);
+				.Where(e => e.GetDomainEvents().Any())
+				.SelectMany(e => e.GetDomainEvents());
 
 			var result = await base.SaveChangesAsync(cancellationToken);
 

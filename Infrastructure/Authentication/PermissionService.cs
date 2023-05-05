@@ -13,15 +13,20 @@ public class PermissionService : IPermissionService
 		_context = context;
 	}
 
-	public async Task<HashSet<string>> GetPermissionsAsync(Guid memberId)
+	public Task<HashSet<string>> GetPermissionsAsync(Guid memberId)
 	{
-		ICollection<Role>[] roles = await _context.Set<Member>()
-			.Include(x => x.Roles)
-			.ThenInclude(x => x.Permissions)
-			.Where(x => x.Id == memberId)
-			.Select(x => x.Roles)
-			.ToArrayAsync();
-
-		return roles.SelectMany(x => x).SelectMany(x => x.Permissions).Select(x => x.Name).ToHashSet();
+		throw new NotImplementedException();
 	}
+
+	//public async Task<HashSet<string>> GetPermissionsAsync(Guid memberId)
+	//{
+	//	ICollection<Role>[] roles = await _context.Set<Member>()
+	//		.Include(x => x.Roles)
+	//		.ThenInclude(x => x.Permissions)
+	//		.Where(x => x.Id == memberId)
+	//		.Select(x => x.Roles)
+	//		.ToArrayAsync();
+
+	//	return roles.SelectMany(x => x).SelectMany(x => x.Permissions).Select(x => x.Name).ToHashSet();
+	//}
 }

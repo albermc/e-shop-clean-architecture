@@ -23,7 +23,7 @@ public sealed class OrdersController : ApiController
 
 		var result = await Sender.Send(command, cancellationToken);
 
-		return result.IsSuccess ? Ok() : BadRequest(result.Error);
+		return result.IsSuccess ? Ok() : BadRequest(result.Errors);
 	}
 
 	[HttpGet("{id}")]
@@ -33,6 +33,6 @@ public sealed class OrdersController : ApiController
 
 		var response = await Sender.Send(query, cancellationToken);
 
-		return response.IsSuccess ? Ok(response.Value) : NotFound(response.Error);
+		return response.IsSuccess ? Ok(response.Value) : NotFound(response.Errors);
 	}
 }
